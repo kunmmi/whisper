@@ -15,5 +15,12 @@ const { authenticateToken } = require('../middleware/auth');
  */
 router.post('/image', authenticateToken, uploadController.upload, uploadController.uploadImage);
 
+/**
+ * POST /api/upload/video
+ * Upload a video file
+ * Requires: multipart/form-data with 'video' field
+ */
+router.post('/video', authenticateToken, uploadController.uploadVideo, uploadController.uploadVideoFile);
+
 module.exports = router;
 
