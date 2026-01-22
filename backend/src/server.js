@@ -23,10 +23,13 @@ const PORT = process.env.PORT || 3000;
 // Create HTTP server
 const server = http.createServer(app);
 
+// Get frontend URL from environment or use default
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3001';
+
 // Initialize Socket.IO
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:3001',
+    origin: FRONTEND_URL,
     methods: ['GET', 'POST'],
     credentials: true
   }
@@ -34,7 +37,7 @@ const io = new Server(server, {
 
 // Middleware
 app.use(cors({
-  origin: 'http://localhost:3001', // Frontend URL
+  origin: FRONTEND_URL, // Frontend URL from environment
   credentials: true
 }));
 app.use(express.json());
@@ -119,8 +122,9 @@ const { initializeSocket } = require('./config/socket');
 initializeSocket(io);
 
 // Start server
-server.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server is running on port ${PORT}`);
+  console.log(`Frontend URL: ${FRONTEND_URL}`);
   console.log(`Socket.IO server initialized`);
 });
 

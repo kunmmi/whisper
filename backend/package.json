@@ -8,6 +8,9 @@
     "dev": "node src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -19,6 +22,8 @@
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
+    "lucide-react": "^0.562.0",
+    "motion": "^12.28.1",
     "multer": "^2.0.2",
     "socket.io": "^4.8.3"
   },

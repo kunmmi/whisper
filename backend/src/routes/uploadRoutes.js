@@ -22,5 +22,12 @@ router.post('/image', authenticateToken, uploadController.upload, uploadControll
  */
 router.post('/video', authenticateToken, uploadController.uploadVideo, uploadController.uploadVideoFile);
 
+/**
+ * POST /api/upload/audio
+ * Upload an audio file
+ * Requires: multipart/form-data with 'audio' field
+ */
+router.post('/audio', authenticateToken, uploadController.uploadAudio, uploadController.uploadAudioFile);
+
 module.exports = router;
 

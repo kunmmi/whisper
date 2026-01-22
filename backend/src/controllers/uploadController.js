@@ -133,10 +133,73 @@ function uploadVideoFile(req, res) {
   }
 }
 
+// Audio storage configuration
+const audioStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadsDir);
+  },
+  filename: (req, file, cb) => {
+    // Generate unique filename: timestamp-random-originalname
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    const ext = path.extname(file.originalname);
+    cb(null, `audio-${uniqueSuffix}${ext}`);
+  }
+});
+
+// Audio file filter
+const audioFileFilter = (req, file, cb) => {
+  const allowedTypes = /mp3|wav|ogg|m4a|aac|webm|opus/;
+  const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+  const mimetype = /audio/.test(file.mimetype);
+
+  // Accept if it's an audio mimetype OR has an allowed extension
+  // This handles cases where files are created from blobs
+  if (mimetype || extname) {
+    return cb(null, true);
+  } else {
+    cb(new Error('Only audio files are allowed (mp3, wav, ogg, m4a, aac, webm, opus)'));
+  }
+};
+
+// Audio upload middleware
+const uploadAudio = multer({
+  storage: audioStorage,
+  limits: {
+    fileSize: 10 * 1024 * 1024 // 10MB limit for audio
+  },
+  fileFilter: audioFileFilter
+});
+
+/**
+ * Upload an audio file
+ * POST /api/upload/audio
+ */
+function uploadAudioFile(req, res) {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No audio file uploaded' });
+    }
+
+    // Return the URL to access the audio file
+    const audioUrl = `/uploads/${req.file.filename}`;
+    
+    res.status(200).json({
+      message: 'Audio uploaded successfully',
+      url: audioUrl,
+      filename: req.file.filename
+    });
+  } catch (error) {
+    console.error('Upload error:', error);
+    res.status(500).json({ error: 'Failed to upload audio' });
+  }
+}
+
 module.exports = {
   uploadImage,
   upload: upload.single('image'), // Middleware for single image upload
   uploadVideoFile,
-  uploadVideo: uploadVideo.single('video') // Middleware for single video upload
+  uploadVideo: uploadVideo.single('video'), // Middleware for single video upload
+  uploadAudioFile,
+  uploadAudio: uploadAudio.single('audio') // Middleware for single audio upload
 };
 
