@@ -112,8 +112,8 @@ function initializeSocket(io) {
           return;
         }
 
-        if (media_type && !['image', 'video', 'file'].includes(media_type)) {
-          socket.emit('error', { error: 'media_type must be one of: image, video, file' });
+        if (media_type && !['image', 'video', 'file', 'audio'].includes(media_type)) {
+          socket.emit('error', { error: 'media_type must be one of: image, video, file, audio' });
           return;
         }
 

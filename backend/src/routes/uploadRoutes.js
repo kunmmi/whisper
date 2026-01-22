@@ -15,5 +15,12 @@ const { authenticateToken } = require('../middleware/auth');
  */
 router.post('/image', authenticateToken, uploadController.upload, uploadController.uploadImage);
 
+/**
+ * POST /api/upload/audio
+ * Upload an audio file
+ * Requires: multipart/form-data with 'audio' field
+ */
+router.post('/audio', authenticateToken, uploadController.uploadAudio, uploadController.uploadAudioFile);
+
 module.exports = router;
 
