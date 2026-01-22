@@ -12,7 +12,7 @@ const db = require('../config/database');
  * @param {string} content - Message content
  * @param {number|null} replyToMessageId - ID of message being replied to (optional)
  * @param {string|null} mediaUrl - URL or base64 data URL of media (optional)
- * @param {string|null} mediaType - Type of media: 'image', 'video', 'file' (optional)
+ * @param {string|null} mediaType - Type of media: 'image', 'video', 'file', 'audio' (optional)
  * @returns {Object} Created message object
  */
 function createMessage(chatId, senderId, content, replyToMessageId = null, mediaUrl = null, mediaType = null) {
