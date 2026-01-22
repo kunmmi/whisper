@@ -26,8 +26,8 @@ function sendMessage(req, res) {
       return res.status(400).json({ error: 'media_type is required when media_url is provided' });
     }
 
-    if (media_type && !['image', 'video', 'file'].includes(media_type)) {
-      return res.status(400).json({ error: 'media_type must be one of: image, video, file' });
+    if (media_type && !['image', 'video', 'file', 'audio'].includes(media_type)) {
+      return res.status(400).json({ error: 'media_type must be one of: image, video, file, audio' });
     }
 
     // Check if chat exists
