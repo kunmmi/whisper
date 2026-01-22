@@ -48,29 +48,42 @@ const upload = multer({
   fileFilter: fileFilter
 });
 
-/**
- * Upload an image
- * POST /api/upload/image
- */
-function uploadImage(req, res) {
-  try {
-    if (!req.file) {
-      return res.status(400).json({ error: 'No file uploaded' });
-    }
-
-    // Return the URL to access the image
-    const imageUrl = `/uploads/${req.file.filename}`;
-    
-    res.status(200).json({
-      message: 'Image uploaded successfully',
-      url: imageUrl,
-      filename: req.file.filename
-    });
-  } catch (error) {
-    console.error('Upload error:', error);
-    res.status(500).json({ error: 'Failed to upload image' });
+// Audio storage configuration
+const audioStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadsDir);
+  },
+  filename: (req, file, cb) => {
+    // Generate unique filename: timestamp-random-originalname
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    const ext = path.extname(file.originalname);
+    cb(null, `audio-${uniqueSuffix}${ext}`);
   }
-}
+});
+
+// Audio file filter
+const audioFileFilter = (req, file, cb) => {
+  const allowedTypes = /mp3|wav|ogg|m4a|aac|webm|opus/;
+  const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+  const mimetype = /audio/.test(file.mimetype);
+
+  // Accept if it's an audio mimetype OR has an allowed extension
+  // This handles cases where files are created from blobs
+  if (mimetype || extname) {
+    return cb(null, true);
+  } else {
+    cb(new Error('Only audio files are allowed (mp3, wav, ogg, m4a, aac, webm, opus)'));
+  }
+};
+
+// Audio upload middleware
+const uploadAudio = multer({
+  storage: audioStorage,
+  limits: {
+    fileSize: 10 * 1024 * 1024 // 10MB limit for audio
+  },
+  fileFilter: audioFileFilter
+});
 
 // Video storage configuration
 const videoStorage = multer.diskStorage({
@@ -110,6 +123,30 @@ const uploadVideo = multer({
 });
 
 /**
+ * Upload an image
+ * POST /api/upload/image
+ */
+function uploadImage(req, res) {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+
+    // Return the URL to access the image
+    const imageUrl = `/uploads/${req.file.filename}`;
+    
+    res.status(200).json({
+      message: 'Image uploaded successfully',
+      url: imageUrl,
+      filename: req.file.filename
+    });
+  } catch (error) {
+    console.error('Upload error:', error);
+    res.status(500).json({ error: 'Failed to upload image' });
+  }
+}
+
+/**
  * Upload a video file
  * POST /api/upload/video
  */
@@ -132,43 +169,6 @@ function uploadVideoFile(req, res) {
     res.status(500).json({ error: 'Failed to upload video' });
   }
 }
-
-// Audio storage configuration
-const audioStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadsDir);
-  },
-  filename: (req, file, cb) => {
-    // Generate unique filename: timestamp-random-originalname
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    const ext = path.extname(file.originalname);
-    cb(null, `audio-${uniqueSuffix}${ext}`);
-  }
-});
-
-// Audio file filter
-const audioFileFilter = (req, file, cb) => {
-  const allowedTypes = /mp3|wav|ogg|m4a|aac|webm|opus/;
-  const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-  const mimetype = /audio/.test(file.mimetype);
-
-  // Accept if it's an audio mimetype OR has an allowed extension
-  // This handles cases where files are created from blobs
-  if (mimetype || extname) {
-    return cb(null, true);
-  } else {
-    cb(new Error('Only audio files are allowed (mp3, wav, ogg, m4a, aac, webm, opus)'));
-  }
-};
-
-// Audio upload middleware
-const uploadAudio = multer({
-  storage: audioStorage,
-  limits: {
-    fileSize: 10 * 1024 * 1024 // 10MB limit for audio
-  },
-  fileFilter: audioFileFilter
-});
 
 /**
  * Upload an audio file
@@ -202,4 +202,3 @@ module.exports = {
   uploadAudioFile,
   uploadAudio: uploadAudio.single('audio') // Middleware for single audio upload
 };
-

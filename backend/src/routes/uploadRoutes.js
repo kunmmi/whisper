@@ -30,4 +30,3 @@ router.post('/video', authenticateToken, uploadController.uploadVideo, uploadCon
 router.post('/audio', authenticateToken, uploadController.uploadAudio, uploadController.uploadAudioFile);
 
 module.exports = router;
-
