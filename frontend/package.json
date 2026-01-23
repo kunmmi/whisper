@@ -8,8 +8,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "serve": "npx serve dist -s -l $PORT",
-    "railway": "npm run build && npx serve dist -s -l $PORT"
+    "serve": "node server.js",
+    "railway": "npm run build && node server.js"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.11",
@@ -34,7 +34,8 @@
     "react-resizable-panels": "^4.4.1",
     "react-router-dom": "^7.12.0",
     "socket.io-client": "^4.8.3",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "express": "^4.18.2"
   },
   "eslintConfig": {
     "extends": [

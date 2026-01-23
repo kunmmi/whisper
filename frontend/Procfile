@@ -1,2 +1,2 @@
-web: npm run build && npx serve dist -s -l $PORT
+web: npm run build && node server.js
 
