@@ -680,7 +680,7 @@ export default function Chats() {
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
       {/* Left Sidebar - Chat List */}
-      <div className={`${chatId ? 'hidden md:flex' : 'flex'} w-full md:w-1/3 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex-col md:min-w-[300px] relative z-10`}>
+      <div className={`${chatId ? 'hidden lg:flex' : 'flex'} w-full lg:w-1/3 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex-col lg:min-w-[300px] relative z-10`}>
         {/* Header */}
         <div className="bg-blue-600 dark:bg-blue-700 text-white px-4 py-3 flex items-center justify-between">
           <div className="flex items-center space-x-3">
@@ -867,7 +867,7 @@ export default function Chats() {
       </div>
 
       {/* Right Side - Chat Window or Empty State */}
-      <div className="flex-1 flex flex-col relative">
+      <div className={`${chatId ? 'flex' : 'hidden lg:flex'} flex-1 flex-col relative`}>
         {chatId && selectedChat ? (
           <>
             {/* Group Info Sidebar */}
@@ -897,7 +897,7 @@ export default function Chats() {
               {/* Back button for mobile */}
               <button
                 onClick={() => navigate('/chat')}
-                className="md:hidden mr-2 p-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                className="lg:hidden mr-2 p-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
                 title="Back to chats"
               >
                 <svg
