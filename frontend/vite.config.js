@@ -5,6 +5,7 @@ import path from 'path'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  base: '/',
   server: {
     port: 3001,
     open: true
@@ -15,6 +16,7 @@ export default defineConfig({
   },
   build: {
     cssCodeSplit: false,
+    cssMinify: true,
     rollupOptions: {
       output: {
         manualChunks: undefined,
